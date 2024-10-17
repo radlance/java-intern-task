@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    @Query(value = "SELECT first_name FROM employee GROUP BY first_name", nativeQuery = true)
+    @Query(value = "SELECT first_name FROM employee GROUP BY first_name ORDER BY first_name", nativeQuery = true)
     List<String> groupByName();
 
     @Query(value = "SELECT * FROM employee WHERE birth_date BETWEEN :startDate AND :endDate", nativeQuery = true)
