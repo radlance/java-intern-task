@@ -3,6 +3,7 @@ package com.radlance.javainterntask.service;
 import com.radlance.javainterntask.database.repository.EmployeeRepository;
 import com.radlance.javainterntask.dto.EmployeeDto;
 import com.radlance.javainterntask.mappers.EmployeeDtoMapper;
+import com.radlance.javainterntask.mappers.EmployeeEntityMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,17 @@ import java.util.List;
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeDtoMapper employeeDtoMapper;
+    private final EmployeeEntityMapper employeeEntityMapper;
 
     @Autowired
     public EmployeeService(
             EmployeeRepository employeeRepository,
-            EmployeeDtoMapper employeeDtoMapper
+            EmployeeDtoMapper employeeDtoMapper,
+            EmployeeEntityMapper employeeEntityMapper
     ) {
         this.employeeRepository = employeeRepository;
         this.employeeDtoMapper = employeeDtoMapper;
+        this.employeeEntityMapper = employeeEntityMapper;
     }
 
     public EmployeeDto findById(Integer id) {
@@ -42,5 +46,14 @@ public class EmployeeService {
                 .stream()
                 .map(employeeDtoMapper::map)
                 .toList();
+    }
+
+    @Transactional
+    public void saveAll(List<EmployeeDto> employees) {
+        employeeRepository.saveAll(employees.stream().map(employeeEntityMapper::map).toList());
+    }
+
+    public List<EmployeeDto> getAll() {
+        return employeeRepository.findAll().stream().map(employeeDtoMapper::map).toList();
     }
 }
