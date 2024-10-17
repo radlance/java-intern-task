@@ -32,7 +32,7 @@ public class EmployeeService {
 
     public EmployeeDto findById(Integer id) {
         return employeeRepository.findById(id).map(employeeDtoMapper::map).orElseThrow(
-                () -> new EntityNotFoundException("user with id: " + id + " not found")
+                () -> new EntityNotFoundException("User with id: " + id + " does not exist")
         );
     }
 
